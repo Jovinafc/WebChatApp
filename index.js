@@ -18,13 +18,20 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  socket.emit('me', socket.id);
+  // console.log(socket.id.substring(0, 4));
+  // let id = socket.id.substring(0, 6);
+  console.log(typeof socket.id);
+  let sock = socket.id.substring(0, 4);
+  console.log(typeof sock);
+  socket.emit('me', sock);
 
   socket.on('disconnect', () => {
     socket.broadcast.emit('callended');
   });
 
   socket.on('calluser', ({ userToCall, signalData, from, name }) => {
+    console.log('User to call - ', userToCall);
+    console.log('From ', from);
     io.to(userToCall).emit('calluser', { signal: signalData, from, name });
   });
 
